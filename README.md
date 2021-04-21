@@ -13,9 +13,14 @@ s3 = boto3.client('s3')
 
 def lambda_handler(event, context):
     # TODO implement
-    source_bucket = event['Records'][0]['s3']['bucket']['name']
-    object_key = urllib.unquote_plus(event['Records'][0]['s3']['object']['key'])
-    target_bucket = 'target-output-bucket'
+    print('hello major')
+    print(event)
+    message = event['Records'][0]['Sns']['Message']
+    obj = json.loads(message)
+    print("From SNS: " + message)
+    source_bucket = obj['Records'][0]['s3']['bucket']['name']
+    object_key = urllib.unquote_plus(obj['Records'][0]['s3']['object']['key'])
+    target_bucket = 'vault1'
     copy_source = {'Bucket': source_bucket, 'Key': object_key}
     print ("Source bucket : ", source_bucket)
     print ("Target bucket : ", target_bucket)
